@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount Maria::Engine => "/maria"
+  mount Maria::Engine => "/cms"
 end
