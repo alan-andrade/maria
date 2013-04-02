@@ -1,0 +1,67 @@
+%title
+  Jamba Juice
+
+%section.jamba
+
+  %section.jamba_center
+    %h1.good_stuff
+      The Good Stuff
+
+    %p
+      Thank you for supporting an organization that is dedicated to keeping
+      kids healthy and active! To show our appreciation,  we’d like to reward
+      you for your participation in Sip to Support.  Here are some special
+      offers that will give you extra dollars to spend at participating
+      locations.
+
+  %section.jamba_deals
+    {% deals_from_program program:jamba per_page:3 %}
+
+    %section.jamba_info
+      %img.jamba_separator{ src: '/cms/images/jamba-separator.png' }
+
+      %article.jamba_info_row
+        .jamba_fruit
+          %img{ src: "/cms/images/jamba-strawberry.png" }
+        .jamba_info_text
+          %h3 How does Sip To Support work?
+          %p
+            When you visit a participating Jamba Juice location,
+            use your Card to pay. 10% of the purchase will be donated to
+            the organization you have selected to support.
+
+          %p Next steps:
+
+          %ol
+            %li You will receive your Card in the mail
+            %li
+              %a{ href: 'https://jambajuice.marqeta.com/card_activations/new', target: '_blank'} Activate your Card
+            %li Purchase one of the special Jamba Juice offers above and use your Card to pay at Jamba Juice (donation swipe and payment altogether!)
+            %li Visit Jamba Juice and feel good about making healthier choices for you and your family
+
+          %p
+            %a.jamba_bullet{href: "#"}
+              %span
+                Back to Top
+              %img{src: '/cms/images/jamba-up-bullet.png'}
+
+      %img.jamba_separator{ src: '/cms/images/jamba-separator.png' }
+
+      %article.jamba_info_row
+        .jamba_fruit
+          %img{src: '/cms/images/jamba-blueberry.png'}
+
+        .jamba_info_text
+          %h3 How Do I Unlock additional Card Benefits?
+          %p
+            Take any of Marqeta’s offers (hundreds of them!) that can be
+            found at
+            %a{href: '/offers/shop-offers-online',  target: '_blank'}
+              Shop+
+            Marqeta has offers for grocery, restaurants, dry cleaning, health &amp; beauty and much more!
+
+            %a.jamba_bullet{href: '#'}
+              %span Back to Top
+              %img{ src: '/cms/images/jamba-up-bullet.png' }
+
+      %img.jamba_separator{src: '/cms/images/jamba-live-fruitfully-sep.png'}
