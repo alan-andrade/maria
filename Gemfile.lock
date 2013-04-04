@@ -143,6 +143,7 @@ DEPENDENCIES
   haml
   jquery-rails
   maria!
+  pry
   rb-fsevent (~> 0.9)
   rspec
   rspec-rails

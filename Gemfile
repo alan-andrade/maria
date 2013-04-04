@@ -14,4 +14,5 @@ group :development, :test do
   gem 'guard-spork'
   gem 'rb-fsevent', '~> 0.9'
   gem 'spork'
+  gem 'pry'
 end
