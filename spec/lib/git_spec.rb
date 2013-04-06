@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Git, git: true do
   before{ FileControl.root_path = FileControl::Test.root_path }
   let(:klass) do
-    Class.new do
+    Txt = Class.new do
       attr_accessor :name, :content
       include Git
     end
@@ -11,11 +11,17 @@ describe Git, git: true do
 
   its(:current_branch){ should == 'test'}
 
-  it 'should commit a change' do
-    thing = klass.new
-    thing.name = 'thing.html'
-    thing.content = '<p> are you kidding me? </p>'
-    thing.commit
-  end
+  context 'with an object ready' do
+    let( :object ){
+      c = klass.new
+      c.name = 'thing.html'
+      c.content = '<p> are you kidding me? </p>'
+      c
+    }
 
+    it 'should stage a change' do
+      object.stage.should be_true
+    end
+
+  end
 end

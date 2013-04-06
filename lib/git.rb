@@ -3,7 +3,7 @@ require 'active_support/concern'
 
 module Git
 
-  ALLOWED_ACTIONS = %w(add commit push checkout)
+  ALLOWED_ACTIONS = %w(add commit push checkout branch rm)
   MASTER_BRANCH = 'master'
 
   extend ActiveSupport::Concern
@@ -19,12 +19,13 @@ module Git
     branches[pointer+1]
   end
 
-  def add
-    git :add, filepath
-  end
-
   def commit
     throw 'Implement it man!'
+  end
+
+  def stage
+    write and Git.add '-f', file_path
+    #                 ^^^^ due to gitigonre
   end
 
   ALLOWED_ACTIONS.each do |action|
@@ -37,7 +38,7 @@ module Git
 
   def self.git(action, *args)
     command =  "git #{action} #{args.join(' ')}"
-    system(command+' 1>/dev/null') or raise 'Github error'
+    system(command+' 1>/dev/null') or raise StandardError, "Github error when called: #{command}"
   end
 
 end
@@ -49,11 +50,22 @@ module Git::Test
   @original_branch != @testing_branch or raise 'Move out from test branch to continue'
 
   def self.before
-    Git.checkout @testing_branch
+    begin
+      Git.branch '-D', @testing_branch
+    rescue
+    ensure
+      Git.checkout '-b', @testing_branch
+    end
   end
 
   def self.after
-    Git.checkout @original_branch
+    begin
+      Git.rm '-rf', FileControl::Test.root_path
+    rescue
+    ensure
+      Git.checkout @original_branch
+      Git.branch '-D', @testing_branch
+    end
   end
 
   def self.setup
