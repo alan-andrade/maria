@@ -5,13 +5,13 @@ describe FileControl do
 
   describe 'Configuration' do
 
-    it 'throws when a root hasnt been set' do
+    it 'throws when root_path is not set' do
       expect{
         Struct.new(:attr_we_dont_care) { include FileControl }
       }.to raise_error FileControl::ConfigurationError
     end
 
-    it 'throws when parent doesnt respond to necesary attributes' do
+    it 'throws when class doesnt respond to :name and :content' do
       FileControl.root_path = '.'
       expect{
         Struct.new(:name) { include FileControl }
@@ -26,7 +26,7 @@ describe FileControl do
       }.not_to raise_error FileControl::RequiredAttributes
     end
 
-    it 'throws when the root provided is nonsense' do
+    it 'throws when the root_path provided doesnt exist' do
       expect{
         FileControl.root_path = 'xyz/nonsese'
       }.to raise_error FileControl::ConfigurationError
@@ -35,34 +35,39 @@ describe FileControl do
   end
 
   describe 'Disk Writting' do
-    let( :test_dir ){ File.join(Maria::Engine.root, 'spec/.tmp') }
+    let( :test_dir ){ FileControl::Test.root_path }
     let( :name )    { 'test.txt' }
     let( :content ) { 'content of this test text' }
 
     before{ FileControl.root_path =  test_dir}
     after{ FileControl.remove_all! }
 
-    it 'writes the object into disk' do
+    it 'writes the instance to disk taking the class name as dir' do
       file_path = File.join(test_dir, 'test.txt')
 
-      page = Struct.new(:name, :content){
+      Page = Class.new do
+        attr_accessor :name, :content
         include FileControl
-      }.new name, content
+      end
 
-      page.should_not be_written_down
+      page = Page.new
+      page.name = name
+      page.content = content
+
+      page.should_not be_written
       page.write.should be_true
-      page.should be_written_down
+      page.should be_written
 
       page.read.should == content
     end
 
-    it 'returns NIL when reads the file before is written' do
+    it 'returns nil when reads before writting' do
       page = Struct.new(:name, :content){
         include FileControl
       }.new name, content
 
       page.read.should be_nil # Should we raise insted?
     end
-
   end
+
 end

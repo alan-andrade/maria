@@ -8,9 +8,8 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
 
-  # FileControl needed setup
-  test_dir = File.join File.dirname(__FILE__), '.tmp'
-  Dir.mkdir(test_dir) unless Dir.exists?(test_dir)
+  FileControl::Test.setup
+  Git::Test.setup
 
   Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 

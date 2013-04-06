@@ -1,30 +1,21 @@
 require 'spec_helper'
 
-describe Git do
-  it{ should respond_to(:username) }
-
-  describe Git::Persistence do
-    let :klass do
-      Class.new { include Git::Persistence }
+describe Git, git: true do
+  before{ FileControl.root_path = FileControl::Test.root_path }
+  let(:klass) do
+    Class.new do
+      attr_accessor :name, :content
+      include Git
     end
-
-    subject{ klass.new }
-
-    it{ should_not be_persisted }
   end
 
+  its(:current_branch){ should == 'test'}
 
-  describe Git::Attributes do
-
-    let :klass do
-      Class.new { include Git::Attributes }
-    end
-
-    subject{ klass.new }
-
-    it{ should respond_to(:body) }
-    it{ should respond_to(:name) }
-
+  it 'should commit a change' do
+    thing = klass.new
+    thing.name = 'thing.html'
+    thing.content = '<p> are you kidding me? </p>'
+    thing.commit
   end
 
 end

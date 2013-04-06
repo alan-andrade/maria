@@ -1,6 +1,4 @@
 require 'active_support/concern'
-#require 'active_support/core_ext/module'
-
 
 #
 # FileControl Module
@@ -16,6 +14,7 @@ require 'active_support/concern'
 #
 # You can use it like this:
 #
+# FileControl.root_path = '.'
 #
 # class TXT
 #   attr_accessor :name, :content
@@ -27,6 +26,7 @@ require 'active_support/concern'
 # txt.content 'This is an email that will be sent to everyone'
 # txt.write
 #   # => true
+#   # written under `root_path`/txt/ohman.txt
 #
 # txt.read
 #   # => 'This is an email that will be sent to everyone'
@@ -82,18 +82,6 @@ module FileControl
       !@root_path.nil?
     end
 
-    # remove_all!
-    #
-    # You'll use this method in the tests. This will delete every file
-    # that has been written under the root_path.
-    #
-    # Be careful, you can loose important data.
-    def remove_all!
-      Dir.entries(root_path).reject{|f| File.directory?(f) }.each do |f|
-        File.delete File.join root_path, f
-      end
-    end
-
     # reset
     #
     # You will use this method in tests to reset the value of root_path.
@@ -104,13 +92,36 @@ module FileControl
     end
   end
 
-  # Instance methods for class which included this.
+  # remove_all!
+  #
+  # You'll use this method in the tests. This will delete every file
+  # that has been written under the root_path.
+  #
+  # Be careful, you can loose important data.
+  remove_files = ->(dir){
+    base_dir = dir
+    Dir.entries(dir).reject{|f| File.directory?(f) }.each do |f|
+      path = File.join base_dir, f
+      File.directory?(path) ?
+        remove_files.(path) :
+        File.delete(path)
+    end
+  } # you shoul never be able to call this from the outside. thats why this way.
 
-  # base_path
+  define_singleton_method :remove_all! do
+    remove_files.(root_path)
+  end
+
+
+  def base_path
+    File.join FileControl.root_path, subdir
+  end
+
+  # file_path
   #
   # Return the complete path including the name of the file.
-  def base_path
-    File.join FileControl.root_path, name
+  def file_path
+    File.join base_path ,name
   end
 
   # write
@@ -120,7 +131,8 @@ module FileControl
   #
   # Returns true or false depending if the writting was successful.
   def write
-    File.open base_path, 'w+' do |f|
+    create_subdirs
+    File.open file_path, 'w+' do |f|
       f.write content
     end
   end
@@ -133,17 +145,41 @@ module FileControl
   # Discuss about throwing errors or return nil.
   #
   def read
-    written_down? ?
-      File.open(base_path).read :
+    written? ?
+      File.open(file_path).read :
       nil
   end
 
-  # written_down?
+  # written?
   #
   # The instance is in the disk yet?
   #
-  def written_down?
-    File.exists? base_path
+  def written?
+    File.exists? file_path
   end
 
+  private
+
+  # Takes the class name as a subdir
+  def subdir
+    self.class.to_s.downcase
+  end
+
+  def create_subdirs
+    Dir.mkdir(base_path) unless Dir.exists?(base_path)
+  end
+
+end
+
+# Test module that will take care of setting up everything
+# needed to run the tests.
+module FileControl::Test
+  def self.setup
+    test_dir = Maria::Engine.root.join 'spec', '.tmp'
+    Dir.mkdir(test_dir) unless Dir.exists?(test_dir)
+  end
+
+  def self.root_path
+    File.join(Maria::Engine.root, 'spec/.tmp')
+  end
 end

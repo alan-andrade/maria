@@ -8,6 +8,7 @@ module Maria
       g.test_framework  :rspec
     end
 
+    # Might be moved to environments/(test/prod/dev).rb
     unless Rails.env.test?
       FileControl.root = Engine.root
     end
