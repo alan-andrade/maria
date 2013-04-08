@@ -17,11 +17,10 @@ module Git
   end
 
   def commited?
-    # XXX: Refactor this CRAP!
     last_commit = Git::Run.exec :log, '-1', '--oneline'
     last_commit_sha = last_commit.match(/(^\w{7})(.*)/)[1]
     files = Git::Run.exec 'diff-tree', '--no-commit-id --name-only -r', last_commit_sha
-    pathnames = files.split(/\n/).map{|git| Pathname.new(git).expand_path.to_s }
+    pathnames = files.split(/\n/).map{|git| File.expand_path git }
     pathnames.include?(file_path)
   end
 
