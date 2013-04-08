@@ -1,15 +1,9 @@
 require 'spec_helper'
 
-describe FileControl do
+describe FileControl, fc: true do
   after(:each){ FileControl.reset }
 
   describe 'Configuration' do
-
-    it 'throws when root_path is not set' do
-      expect{
-        Struct.new(:attr_we_dont_care) { include FileControl }
-      }.to raise_error FileControl::ConfigurationError
-    end
 
     it 'throws when class doesnt respond to :name and :content' do
       FileControl.root_path = '.'
@@ -40,7 +34,6 @@ describe FileControl do
     let( :content ) { 'content of this test text' }
 
     before{ FileControl.root_path =  test_dir}
-    after{ FileControl.remove_all! }
 
     it 'writes the instance to disk taking the class name as dir' do
       file_path = File.join(test_dir, 'test.txt')

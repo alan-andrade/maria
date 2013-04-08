@@ -52,7 +52,6 @@ module FileControl
   extend ActiveSupport::Concern
 
   included do
-    FileControl.root_path? or raise ConfigurationError, 'Please set a root_path for FileControl'
     # Is there a better way to check instance methods ?
     unless  instance_methods(false).include?(:name) and
             instance_methods(false).include?(:content)
@@ -92,27 +91,6 @@ module FileControl
     end
   end
 
-  # remove_all!
-  #
-  # You'll use this method in the tests. This will delete every file
-  # that has been written under the root_path.
-  #
-  # Be careful, you can loose important data.
-  remove_files = ->(dir){
-    base_dir = dir
-    Dir.entries(dir).reject{|f| File.directory?(f) }.each do |f|
-      path = File.join base_dir, f
-      File.directory?(path) ?
-        remove_files.(path) :
-        File.delete(path)
-    end
-  } # you shoul never be able to call this from the outside. thats why this way.
-
-  define_singleton_method :remove_all! do
-    remove_files.(root_path)
-  end
-
-
   def base_path
     File.join FileControl.root_path, subdir
   end
@@ -131,6 +109,7 @@ module FileControl
   #
   # Returns true or false depending if the writting was successful.
   def write
+    FileControl.root_path? or raise ConfigurationError, 'Please set a root_path for FileControl'
     create_subdirs
     File.open file_path, 'w+' do |f|
       f.write content
@@ -171,15 +150,4 @@ module FileControl
 
 end
 
-# Test module that will take care of setting up everything
-# needed to run the tests.
-module FileControl::Test
-  def self.setup
-    test_dir = Maria::Engine.root.join 'spec', '.tmp'
-    Dir.mkdir(test_dir) unless Dir.exists?(test_dir)
-  end
-
-  def self.root_path
-    File.join(Maria::Engine.root, 'spec/.tmp')
-  end
-end
+require 'file_control/test'

@@ -2,26 +2,34 @@ require 'spec_helper'
 
 describe Git, git: true do
   before{ FileControl.root_path = FileControl::Test.root_path }
-  let(:klass) do
-    Txt = Class.new do
-      attr_accessor :name, :content
-      include Git
+
+  context 'Branch traversing' do
+    it 'should return the current branch' do
+      Git.branch.current.should == Git::Branch.current
+      Git.branch.current.should == 'test'
+    end
+
+    it 'should switch branches' do
+      Git.branch.switch_to 'deleteme'
+      Git.branch.current.should_not == 'test'
+      Git.branch.current.should == 'deleteme'
+      Git.branch.switch_to 'test'
+      Git.branch.delete 'deleteme'
     end
   end
 
-  its(:current_branch){ should == 'test'}
+  context 'Committing and Staging files' do
+    let(:file){ file_mock }
 
-  context 'with an object ready' do
-    let( :object ){
-      c = klass.new
-      c.name = 'thing.html'
-      c.content = '<p> are you kidding me? </p>'
-      c
-    }
+    before{ file.class.class_eval{ include Git } }
 
-    it 'should stage a change' do
-      object.stage.should be_true
+    it 'should stage (add) the file to HEAD' do
+      file.should_not be_written
+      file.status.should_not be_staged
+      file.stage
+      file.should be_written
+      file.status.should be_staged
     end
-
   end
+
 end
