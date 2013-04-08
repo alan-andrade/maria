@@ -25,15 +25,15 @@ describe Git, git: true do
 
     it 'should stage (add) the file to the index' do
       file.should_not be_written
-      file.status.should_not be_staged
+      file.should_not be_staged
       file.stage
       file.should be_written
-      file.status.should be_staged
+      file.should be_staged
     end
 
     it 'should commit the file' do
       file.stage
-      file.status.should be_staged
+      file.should be_staged
       file.should_not be_commited
       file.commit('name of comitter')
       file.should be_commited
