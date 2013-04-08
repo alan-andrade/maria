@@ -7,7 +7,7 @@ module Git
     @original_branch != @testing_branch or throw 'Move out from test branch to continue'
 
     def self.before
-      Git.branch.switch_to @testing_branch
+      Git.branch.force_switch_to @testing_branch
     end
 
     def self.after

@@ -10,7 +10,7 @@ describe Git, git: true do
     end
 
     it 'should switch branches' do
-      Git.branch.switch_to 'deleteme'
+      Git.branch.force_switch_to 'deleteme'
       Git.branch.current.should_not == 'test'
       Git.branch.current.should == 'deleteme'
       Git.branch.switch_to 'test'

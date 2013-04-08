@@ -14,7 +14,11 @@ module Git
     end
 
     def switch_to(branch)
-      run :checkout, '-B', branch, '-q'
+      run(:checkout, branch, '-q')
+    end
+
+    def force_switch_to(branch)
+      run(:checkout, '-B', branch, '-q')
     end
 
   end #/branch
