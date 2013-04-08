@@ -4,9 +4,13 @@ module Git
     extend self
 
     def get(file_path)
-      status_result = Git::Run.exec(:status, '--porcelain', file_path)
-      status_line = status_result.split(/\n/).first
-      Git::StatusLine.new(status_line)
+      Git::StatusLine.new(file_status file_path)
+    end
+
+    def file_status(file_path)
+      File.exists?(file_path) ?
+        Git::Run.exec(:status, '--porcelain', file_path).split(/\n/).first :
+        nil
     end
 
   end #/Status

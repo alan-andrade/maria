@@ -12,12 +12,16 @@ module Git
 
     def self.after
       begin
-        Git::Run.run :rm, '-rf', FileControl::Test.root_path
+        Git::Run.run(:rm, '-rf', FileControl::Test.root_path) if has_testing_files?
       rescue
       ensure
         Git.branch.switch_to @original_branch
         Git.branch.delete @testing_branch
       end
+    end
+
+    def self.has_testing_files?
+      Git::Run.exec('ls-files', FileControl::Test.root_path).split(/\n/).any?
     end
 
     def self.setup

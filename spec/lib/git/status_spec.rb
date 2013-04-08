@@ -7,13 +7,14 @@ describe Git, git: true do
   context 'With a staged filed' do
 
     before {
-      Git::Run.stub exec: "AD spec/.tmp/filecontrol::testhelpers::testfile/test_dummy\n"
+      FileControl.root_path = FileControl::Test.root_path
+      Git::Status.stub file_status: "AD spec/.tmp/filecontrol::testhelpers::testfile/test_dummy\n"
       file.class.class_eval{ include Git }
-      file.stub file_path: 'whatever'
     }
 
     it 'should say is staged and deleted from working tree' do
       # => AD means is added, but deleted in the working tree.
+      file.stage
       file.status.should be_staged
     end
 

@@ -23,13 +23,20 @@ describe Git, git: true do
 
     before{ file.class.class_eval{ include Git } }
 
-    it 'should stage (add) the file to HEAD' do
+    it 'should stage (add) the file to the index' do
       file.should_not be_written
       file.status.should_not be_staged
       file.stage
       file.should be_written
       file.status.should be_staged
     end
+
+    it 'should commit the file' do
+      file.stage
+      file.commit('name of comitter')
+      file.status.should be_commited
+    end
+
   end
 
 end

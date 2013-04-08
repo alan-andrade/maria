@@ -2,9 +2,14 @@ module FileControl::Test
   extend self
 
   def setup
-    Dir.mkdir(root_path) unless Dir.exists?(root_path)
-
     RSpec.configure do |c|
+      # giak, this repetition of code makes me sick!
+      c.before(:each){
+        if example.example_group.metadata[:git] or
+           example.example_group.metadata[:fc]
+           FileControl::Test.setup_dirs
+        end
+      }
       c.after(:each){
         if example.example_group.metadata[:git] or
            example.example_group.metadata[:fc]
@@ -19,18 +24,21 @@ module FileControl::Test
   end
 
   def clean!
-    `rm -rf #{root_path}/*` # Kill'em all.
+    `rm -rf #{root_path}` # Kill'em all.
+  end
+
+  def setup_dirs
+    Dir.mkdir(root_path) unless Dir.exists?(root_path)
   end
 
 end
 
 module FileControl::TestHelpers
-  TestFile = Struct.new(:name,:content) do
+  TestFile = Struct.new(:name, :content) do
     include FileControl
   end
 
   def file_mock
     TestFile.new('test_dummy', 'I love dummy files :)')
   end
-
 end
