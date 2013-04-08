@@ -34,9 +34,9 @@ describe Git, git: true do
     it 'should commit the file' do
       file.stage
       file.should be_staged
-      file.should_not be_commited
+      file.should_not be_committed
       file.commit('name of comitter')
-      file.should be_commited
+      file.should be_committed
     end
 
   end

@@ -1,29 +1,89 @@
 require 'active_support/core_ext/string/inflections'
 
+# Git module
+#
+# When included, you could persist(commit) any instance as long as it
+# reponds to
+#
+#   # file_path
+#   # name
+#   # content
+#
+# Normally you will include FileControl along with Git so that everything
+# runs smoothly.
+#
+# Do it as follows:
+#
+#
+# class Album
+#   attr_accessor :name, :content
+#
+#   include FileControl
+#   include Git
+# end
+#
+# album = Album.new
+# album.name 'In Rainbows'
+# album.content 'Pure awesome music'
+#
+# Git functionallity
+#
+# album.stage
+# album.stage? #=> true
+# album.commit('Thom Yorke')
+# album.commited? #=> true
+#
+# Library still with a lot work to do. Don't expect more than this.
 module Git
 
+  # status
+  #
+  # Returns the status object for the file
   def status
     Git::Status.get(file_path)
   end
 
+  # stage
+  #
+  # Will stage or add the file to index.
   def stage
     write
     Git::Run.run :add, '-f', file_path
   end
 
+  # staged?
+  #
+  # Seeks under file status and verify is staged using the git
+  # index and working tree notation.
   def staged?
     Git::Status.get(file_path).staged?
   end
 
+  # commit
+  #
+  # 'Persist' or commit the file.
   def commit(author_name)
     Git.commit.apply author_name
   end
 
-  def commited?
-    commited_files = Git.commit.files_in_commit(Git.commit.newest)
-    commited_files.include?(file_path)
+  # commited?
+  #
+  # Using the last commit, checks if it was touched or not.
+  #
+  # XXX: This might have a flaw.
+  # If we comit one file, edit it, stage it, and then ask if its committed,
+  # response will be true. Which is incorrect.
+  # Still thinking a way of solving it.
+  def committed?
+    committed_files = Git.commit.files_in_commit(Git.commit.newest)
+    committed_files.include?(file_path)
   end
 
+  #
+  # Will redirect every call to submodules if any.
+  #
+  # Git.commit.list => Calls Git::Commit.list
+  # Git.status.staged? => Calls Git::Status.staged?
   def self.method_missing(name, *args, &block)
     namespace = 'git/'
     module_string = namespace + name.to_s

@@ -14,7 +14,8 @@ module Git
     end
 
     def self.list(n=1)
-      CommitParser.parse(Git::Run.exec(:log, "-#{n}", '--oneline'))
+      raw_commits = Git::Run.exec(:log, "-#{n}", '--oneline')
+      CommitParser.parse(raw_commits)
     end
 
     def self.files_in_commit(commit, complete_path=true)
