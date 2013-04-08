@@ -33,8 +33,10 @@ describe Git, git: true do
 
     it 'should commit the file' do
       file.stage
+      file.status.should be_staged
+      file.should_not be_commited
       file.commit('name of comitter')
-      file.status.should be_commited
+      file.should be_commited
     end
 
   end

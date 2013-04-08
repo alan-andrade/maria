@@ -102,6 +102,13 @@ module FileControl
     File.join base_path ,name
   end
 
+  # relative_path
+  #
+  # Return the relative path including the name of the file.
+  def relative_path
+    File.join subdir,name
+  end
+
   # write
   #
   # Writes the content of the class under the 'content' attribute to a file
