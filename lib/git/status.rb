@@ -52,7 +52,18 @@ module Git
     #
     # Determines if the file is added to the INDEX, not the working directory.
     def staged?
-      @x == "A"
+      @x == "A" or updated?
+      # A means is a new file we just added.
+      # M means a file we added before, that has changed
+    end
+
+    def updated?
+      @x == "M"
+    end
+
+    # Means a new file we just staged.
+    def new_file?
+      @x.nil? and @y.nil?
     end
 
   end # /statusline
@@ -63,6 +74,8 @@ module Git
   class EmptyStatusLine
     def initialize; self; end
     def staged?; false; end
+    def new_file?; false; end
+    def updated?; false; end
   end
 
 end

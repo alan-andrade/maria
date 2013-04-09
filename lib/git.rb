@@ -70,13 +70,19 @@ module Git
   #
   # Using the last commit, checks if it was touched or not.
   #
-  # XXX: This might have a flaw.
-  # If we comit one file, edit it, stage it, and then ask if its committed,
-  # response will be true. Which is incorrect.
-  # Still thinking a way of solving it.
+  # Bit complicated logic to determined if a file is committed or not.
+  #
+  # If the file is found in the last commit, we still need to check that
+  # hasn't been updated.
+  #
+  # I'm sure there's a better way to get this.
   def committed?
     committed_files = Git.commit.files_in_commit(Git.commit.newest)
-    committed_files.include?(file_path)
+    found = committed_files.include?(file_path)
+
+    status.new_file? ?
+      found :
+      found and !status.updated?
   end
 
   #

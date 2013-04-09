@@ -34,8 +34,15 @@ describe Git, git: true do
     it 'should commit the file' do
       file.stage
       file.should be_staged
-      file.should_not be_committed
       file.commit('name of comitter')
+      file.should be_committed
+
+      #update
+      file.content = 'Different stuff in here'
+      file.stage
+      file.should be_staged
+      file.should_not be_committed
+      file.commit('another name')
       file.should be_committed
     end
 
