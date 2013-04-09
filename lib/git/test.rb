@@ -1,3 +1,5 @@
+require 'git'
+
 module Git
   module Test
 

@@ -55,7 +55,7 @@ module FileControl
     # Is there a better way to check instance methods ?
     unless  instance_methods(false).include?(:name) and
             instance_methods(false).include?(:content)
-      raise RequiredAttributes, "Please make sure #{self.class.name} responds to :name and :content"
+      raise RequiredAttributes, "Please make sure #{self.name} responds to :name and :content"
     end
   end
 
@@ -156,5 +156,3 @@ module FileControl
   end
 
 end
-
-require 'file_control/test'

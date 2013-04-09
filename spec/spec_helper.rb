@@ -8,7 +8,11 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
 
+
+  require 'file_control/test'
   FileControl::Test.setup
+
+  require 'git/test'
   Git::Test.setup
 
   Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
