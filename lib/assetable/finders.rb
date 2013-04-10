@@ -15,11 +15,10 @@ module Assetable
   module Finders
 
     def all
-      `ls #{base_path}`.split.map do |f|
-        unless File.directory?(f)
-          Maria::Page.new(name: f)
-        end
-      end
+      puts "Base path: #{base_path}"
+      files = `ls #{base_path}`
+      puts "Files: #{files}"
+      files.split
     end
 
   end
