@@ -38,12 +38,12 @@ describe FileControl, fc: true do
     it 'writes the instance to disk taking the class name as dir' do
       file_path = File.join(test_dir, 'test.txt')
 
-      Page = Class.new do
+      Maria::TestPage = Class.new do
         attr_accessor :name, :content
         include FileControl
       end
 
-      page = Page.new
+      page = Maria::TestPage.new
       page.name = name
       page.content = content
 
@@ -52,6 +52,8 @@ describe FileControl, fc: true do
       page.should be_written
 
       page.read.should == content
+      # It demodulalizes the file_path where its saved
+      page.file_path.should_not match(/::/)
     end
 
     it 'returns nil when reads before writting' do

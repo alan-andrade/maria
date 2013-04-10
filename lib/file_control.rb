@@ -124,7 +124,7 @@ module FileControl
   #
   # Return the relative path including the name of the file.
   def relative_path
-    File.join subdir,name
+    File.join subdir, name
   end
 
   # write
@@ -166,7 +166,7 @@ module FileControl
 
   # Takes the class name as a subdir
   def subdir
-    self.class.to_s.downcase
+    self.class.name.demodulize.downcase.pluralize
   end
 
   def create_subdirs

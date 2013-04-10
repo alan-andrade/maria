@@ -11,7 +11,7 @@ module Maria
     # Might be moved to environments/(test/prod/dev).rb
     require 'file_control'
     unless Rails.env.test?
-      ::FileControl.root_path = Engine.root
+      ::FileControl.root_path = Engine.root + 'app/views/maria'
     end
 
   end

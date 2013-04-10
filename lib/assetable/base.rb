@@ -4,6 +4,7 @@ module Assetable
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
+    extend Assetable::Finders
     extend ActiveModel::Naming
 
     include FileControl # Persists to disk
@@ -19,7 +20,11 @@ module Assetable
     end
 
     def save
-      valid? and committ
+      valid? and write
+    end
+
+    def to_param
+      name
     end
 
     alias_method :persisted?, :committed?
@@ -27,6 +32,10 @@ module Assetable
     def self.asset_type(type=:html)
       base = 'assetable/'
       include (base+type.to_s).camelize.constantize
+    end
+
+    def self.base_path
+      File.join FileControl.root_path, self.name.demodulize.downcase.pluralize
     end
 
     private
