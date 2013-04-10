@@ -1,5 +1,7 @@
 module Maria
+
   class Page < Assetable::Base
-    asset_type :dummy
+    asset_type :html
   end
+
 end

@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe 'Pages routing' do
 
-  it 'requires a brand and/or the name of the page' do
-    expect( get: '/pages' ).not_to be_routable
-    expect( get: '/pages/jamba' ).to be_routable
-    expect( get: '/pages/jamba/prices' ).to be_routable
+  it 'responds to all CRUD routes' do
+    expect( get: 'pages/new' ).to be_routable
+    expect( get: 'pages/1' ).to be_routable
+    expect( delete: 'pages/1' ).to be_routable
+    expect( put: 'pages/1' ).to be_routable
   end
 
 end

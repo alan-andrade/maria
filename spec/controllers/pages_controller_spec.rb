@@ -2,14 +2,19 @@ require 'spec_helper'
 
 describe Maria::PagesController do
 
-  it 'defaults name to index' do
-    get :show, brand: 'jamba'
-    response.should render_template 'pages/jamba/index'
+  it 'should render a form' do
+    get :new
+    response.should render_template 'maria/pages/new'
   end
 
-  it 'renders the page passed as name' do
-    get :show, brand: 'jamba', name: 'learn_more'
-    response.should render_template 'pages/jamba/learn_more'
+  it 'should render new there where errors with the form' do
+    post :create
+    response.should render_template 'maria/pages/new'
+  end
+
+  it 'should redirect to index when is cool' do
+    post :create, name: 'cool', content: 'meh.', committer: 'name'
+    response.should redirect_to :index
   end
 
 end

@@ -99,7 +99,25 @@ module FileControl
   #
   # Return the complete path including the name of the file.
   def file_path
-    File.join base_path ,name
+    File.join base_path , complete_name
+  end
+
+  # complete_name
+  #
+  # Appends and extension to the name if any available
+  def complete_name
+    name.nil? ?
+      '' :
+      name + '.' +extension
+  end
+
+
+  # extension
+  #
+  # Method meant to be overriden with a function that returns a descent
+  # extension.
+  def extension
+    ''
   end
 
   # relative_path

@@ -6,7 +6,7 @@ module Assetable::Dummy
   end
 
   def max_size
-    0
+    5.bytes
   end
 
   def extension

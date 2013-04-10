@@ -8,6 +8,7 @@ module FileControl::Test
         if example.example_group.metadata[:git] or
            example.example_group.metadata[:fc]
            FileControl::Test.setup_dirs
+           FileControl.root_path = FileControl::Test.root_path
         end
       }
       c.after(:each){

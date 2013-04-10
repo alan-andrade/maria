@@ -15,6 +15,7 @@ module Git
     #
     # It requires the name of the committer.
     def self.apply(author_name)
+      author_name = author_name || committer
       throw ArgumentError, 'Please provide an author name to proceed' if author_name.nil?
       Git::Run.run :commit, "-m '#{author_name}'"
     end

@@ -1,18 +1,19 @@
 module Maria
   class PagesController < ApplicationController
 
-    def show
-      render "pages/#{brand}/#{name}"
+    def new
+      @page = Maria::Page.new
     end
 
-    private
-
-    def brand
-      params[:brand]
+    def create
+      @page = Maria::Page.new(params[:page])
+      @page.save ?
+        redirect_to(:index) :
+        render(:new)
     end
 
-    def name
-      params[:name] or 'index'
+    def index
+      @pages = Page.all
     end
 
   end

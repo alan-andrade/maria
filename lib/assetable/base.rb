@@ -5,16 +5,24 @@ module Assetable
     include ActiveModel::Conversion
     include ActiveModel::Validations
     extend ActiveModel::Naming
-    include FileControl
-    include Git
+
+    include FileControl # Persists to disk
+    include Git # Persists to git
 
     validates_presence_of :name, :content, :committer
-    validate :content_integrity # just to avoid the name override
+    validate :content_length # just to avoid the name override
 
     def initialize(attributes={})
-      throw 'Provide and asset type' if asset_type.nil?
+      attributes ||= {} # avoid nil, ugly though :'(
+      throw 'Provide and asset type' unless respond_to? :asset_type
       attributes.each{ |k,v| send "#{k}=", v }
     end
+
+    def save
+      valid? and committ
+    end
+
+    alias_method :persisted?, :committed?
 
     def self.asset_type(type=:html)
       base = 'assetable/'
@@ -23,10 +31,10 @@ module Assetable
 
     private
 
-    def content_integrity
-      if content.nil? or content.empty?
-        errors.add :base, 'Content cant be blank.'
-      elsif content.length > max_size
+    # Validating this way feels funky... meh
+    def content_length
+      ### ___________ -> giak, a bunch of logic here.
+      if !content.nil? and content.length > max_size
         errors.add :base, 'Content is too big.'
       end
     end
