@@ -3,20 +3,11 @@ module FileControl::Test
 
   def setup
     RSpec.configure do |c|
-      # giak, this repetition of code makes me sick!
       c.before(:each){
-        if example.example_group.metadata[:git] or
-           example.example_group.metadata[:fc]
-           FileControl::Test.setup_dirs
-           FileControl.root_path = FileControl::Test.root_path
-        end
+         FileControl::Test.setup_dirs
+         FileControl.root_path = FileControl::Test.root_path
       }
-      c.after(:each){
-        if example.example_group.metadata[:git] or
-           example.example_group.metadata[:fc]
-           FileControl::Test.clean!
-        end
-      }
+      c.after(:each){ FileControl::Test.clean!  }
     end # /rspec
   end
 

@@ -8,7 +8,7 @@ module Maria
     def create
       @page = Maria::Page.new(params[:page])
       @page.save ?
-        redirect_to(action: :index) :
+        redirect_to(pages_path) :
         render(:new)
     end
 

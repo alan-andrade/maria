@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Git, git: true do
-  before{ FileControl.root_path = FileControl::Test.root_path }
 
   context 'Branch traversing' do
     it 'should return the current branch' do

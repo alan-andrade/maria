@@ -166,7 +166,7 @@ module FileControl
 
   # Takes the class name as a subdir
   def subdir
-    self.class.name.demodulize.downcase.pluralize
+    self.class.to_s.demodulize.downcase.pluralize
   end
 
   def create_subdirs

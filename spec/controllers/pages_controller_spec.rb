@@ -12,9 +12,11 @@ describe Maria::PagesController do
     response.should render_template 'maria/pages/new'
   end
 
-  it 'should redirect to index when is cool' do
-    post :create, name: 'cool', content: 'meh.', committer: 'name'
-    response.should redirect_to :index
+  it 'should redirect to index when has all attributes' do
+    post :create, page: { name: 'cool beans',
+                          content: 'meh.',
+                          committer: 'name' }
+    response.should redirect_to pages_path
   end
 
 end
