@@ -8,7 +8,7 @@ module Git
     end
 
     def exec(action, *args)
-      `git #{action.to_s} #{args.join(' ')}`
+      `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
     end
 
   end

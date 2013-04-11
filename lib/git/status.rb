@@ -5,26 +5,56 @@ module Git
   # Tool to determine the current status of a file.
   #
   # Right now is super basic.
-  module Status
-    extend self
+  class Status
+    attr_reader :status
 
-    # get
-    #
-    # Will return the StatusLine of the file_path
+    def initialize(file_path)
+      @status = Git::Parser.new(Git::Status.run(file_path)).parse
+    end
+
+    def in_wt?
+      !!@status.y.match(/[ MD]/)
+    end
+
+    def in_index?
+      !!@status.x.match(/[ MARC]/)
+    end
+
     def get(file_path)
       Git::StatusLine.new file_status(file_path)
     end
 
-    # file_status
-    #
-    # returns the raw status of file_path
     def file_status(file_path)
       File.exists?(file_path) ?
         Git::Run.exec(:status, '--porcelain', file_path).split(/\n/).first :
         nil
     end
 
+    def self.run(file_path)
+      result = nil
+      if File.exists?(file_path)
+        result = Git::Run.exec(:status, '--porcelain', file_path)
+        result = result.first
+      end
+
+      result or ''
+    end
+
   end #/Status
+
+
+  class StatusParser
+
+    def initialize(file_path)
+      @raw_status = Git::Run.exec(:status, '--porcelain', file_path)
+      @status_line = @raw_status.split(/\n/).first
+    end
+
+    def parse
+      @status_line
+    end
+
+  end #/Status parser
 
   # StatusLine class
   #

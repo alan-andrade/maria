@@ -4,20 +4,24 @@ describe Git, git: true do
 
   let(:file){ file_mock }
 
-  context 'With a staged filed' do
+  before { file.class.class_eval{ include Git } }
 
-    before {
-      FileControl.root_path = FileControl::Test.root_path
-      Git::Status.stub file_status: "AD spec/.tmp/filecontrol::testhelpers::testfile/test_dummy\n"
-      file.class.class_eval{ include Git }
-    }
+  it '.status should return a Git::Status object' do
+    file.status.should be_kind_of(Git::Status)
+    file.status.should_not be_in_wt
+    file.status.should_not be_in_index
 
-    it 'should say is staged and deleted from working tree' do
-      # => AD means is added, but deleted in the working tree.
-      file.stage
-      file.status.should be_staged
-    end
+    file.write
+    file.status.should_not be_in_wt # not tracked yet
+    file.status.should_not be_in_index
 
+    file.stage
+    file.status.should be_in_wt # now we're tracking it
+    file.status.should be_in_index
+
+    #file.commit('meh')
+    #file.status.should_not be_in_wt
+    #file.status.should_not be_in_index
   end
 
 end

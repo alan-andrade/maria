@@ -4,9 +4,8 @@ module Git
     extend self
 
     def current
-      branches = exec(:branch).split
-      default = branches.index('*')
-      branches[default+1]
+      branch = exec(:branch).find{|b| b.match /\*/ }
+      branch.gsub(/\* /, '')
     end
 
     def delete(branch)
