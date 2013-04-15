@@ -40,7 +40,7 @@ module Git
   #
   # Returns the status object for the file
   def status
-    Git::Status.get(self)
+    Git::Status.get(self.file_path)
   end
 
   # stage

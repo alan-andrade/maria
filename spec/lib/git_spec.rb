@@ -4,16 +4,16 @@ describe Git, git: true do
 
   context 'Branch traversing' do
     it 'should return the current branch' do
-      Git.branch.current.should == Git::Branch.current
-      Git.branch.current.should == 'test'
+      Git::Branch.current.should == Git::Branch.current
+      Git::Branch.current.should == 'test'
     end
 
     it 'should switch branches' do
-      Git.branch.force_switch_to 'deleteme'
-      Git.branch.current.should_not == 'test'
-      Git.branch.current.should == 'deleteme'
-      Git.branch.switch_to 'test'
-      Git.branch.delete 'deleteme'
+      Git::Branch.force_switch_to 'deleteme'
+      Git::Branch.current.should_not == 'test'
+      Git::Branch.current.should == 'deleteme'
+      Git::Branch.switch_to 'test'
+      Git::Branch.delete 'deleteme'
     end
   end
 
