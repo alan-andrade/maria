@@ -1,5 +1,4 @@
-require 'active_support/core_ext/string/inflections'
-
+require 'active_support/core_ext/module'
 # Git module
 #
 # When included, you could persist(commit) any instance as long as it
@@ -29,12 +28,13 @@ require 'active_support/core_ext/string/inflections'
 # Git functionallity
 #
 # album.stage
-# album.stage? #=> true
+# album.staged? #=> true
 # album.commit('Thom Yorke')
 # album.commited? #=> true
 #
 # Library still with a lot work to do. Don't expect more than this.
 module Git
+  mattr_accessor :remote, :remote_url
 
   # status
   #
@@ -80,14 +80,18 @@ module Git
     return false if status.in_wt? or status.in_index?
     files = Git::Commits.last.files
     files.include?(self.file_path)
-
-    #committed_files = Git.commit.files_in_commit(Git.commit.newest)
-    #found = committed_files.include?(file_path)
-
-    #status.new_file? ?
-      #found :
-      #found and !status.updated?
   end
+
+  def push
+    return false unless committed?
+    Git::Run.push(Git.remote)
+  end
+
+  def pushed?
+    Git::Run.diff_tree(Git.remote_url, Git::Commits.last.sha).
+      map{|f| File.expand_path f }.include? self.file_path
+  end
+
 end
 
 require File.dirname(__FILE__) + '/git/run.rb'

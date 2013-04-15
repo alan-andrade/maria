@@ -32,4 +32,14 @@ describe Git::Commit, git: true do
     file.should be_committed
   end
 
+  it 'should push a commit to remote' do
+    file = file_mock
+    file.class.class_eval{ include Git }
+    file.write
+    file.stage
+    file.commit('w00t')
+    file.push
+    file.should be_pushed
+  end
+
 end

@@ -24,8 +24,12 @@ module Git
       result or ''
     end
 
-    def diff_tree(sha)
-      exec('diff-tree', '--no-commit-id --name-only -r', sha)
+    def diff_tree(branch='', sha)
+      exec('diff-tree', '--no-commit-id --name-only -r', branch, sha)
+    end
+
+    def push(remote)
+      run(:push, remote)
     end
 
   end

@@ -11,6 +11,8 @@ module Git
     def self.before
       Git::Branch.force_switch_to @testing_branch
       Git::Repo.set_fake_remote
+      Git.remote = 'test'
+      Git.remote_url = 'remotes/test/test'
     end
 
     def self.after

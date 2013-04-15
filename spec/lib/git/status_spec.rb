@@ -18,10 +18,5 @@ describe Git, git: true do
     file.stage
     file.status.should be_in_wt # now we're tracking it
     file.status.should be_in_index
-
-    #file.commit('meh')
-    #file.status.should_not be_in_wt
-    #file.status.should_not be_in_index
   end
-
 end

@@ -17,34 +17,4 @@ describe Git, git: true do
     end
   end
 
-  context 'Committing and Staging files' do
-    let(:file){ file_mock }
-
-    before{ file.class.class_eval{ include Git } }
-
-    #it 'should stage (add) the file to the index' do
-      #file.should_not be_written
-      #file.should_not be_staged
-      #file.stage
-      #file.should be_written
-      #file.should be_staged
-    #end
-
-    #it 'should commit the file' do
-      #file.stage
-      #file.should be_staged
-      #file.commit('name of comitter')
-      #file.should be_committed
-
-      ##update
-      #file.content = 'Different stuff in here'
-      #file.stage
-      #file.should be_staged
-      #file.should_not be_committed
-      #file.commit('another name')
-      #file.should be_committed
-    #end
-
-  end
-
 end
