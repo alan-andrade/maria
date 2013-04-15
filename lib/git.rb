@@ -63,7 +63,7 @@ module Git
   #
   # 'Persist' or commit the file.
   def commit(author_name)
-    Git.commit.apply author_name
+    Git::Commit.apply author_name
   end
 
   # commited?
@@ -77,12 +77,16 @@ module Git
   #
   # I'm sure there's a better way to get this.
   def committed?
-    committed_files = Git.commit.files_in_commit(Git.commit.newest)
-    found = committed_files.include?(file_path)
+    return false if status.in_wt? or status.in_index?
+    files = Git::Commits.last.files
+    files.include?(self.file_path)
 
-    status.new_file? ?
-      found :
-      found and !status.updated?
+    #committed_files = Git.commit.files_in_commit(Git.commit.newest)
+    #found = committed_files.include?(file_path)
+
+    #status.new_file? ?
+      #found :
+      #found and !status.updated?
   end
 end
 

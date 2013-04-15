@@ -6,7 +6,7 @@ describe Git::Commit, git: true do
     #fake_commits
     Git::Run.stub(log: ["e2dc690 improvements to API design"])
     #fake_files_in_commits
-    Git::Run.stub("diff_tree" => ['test', 'dummy.txt'])
+    Git::Run.stub("diff_tree" => ['spec/.tmp/testfiles/test_dummy.', 'dummy.txt'])
   end
 
   it 'contains the files under the commit' do
@@ -20,7 +20,16 @@ describe Git::Commit, git: true do
     file.write
     file.stage
     file.should be_staged
+    file.should_not be_committed
+    file.commit('andrade')
+    file.should be_committed
 
+    file.content = 'Troll content'
+    file.write
+    file.stage
+    file.should_not be_committed
+    file.commit('andrade 2')
+    file.should be_committed
   end
 
 end
