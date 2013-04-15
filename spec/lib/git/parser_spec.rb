@@ -2,30 +2,43 @@ require 'spec_helper'
 
 describe Git::Parser do
 
-  it 'should parse a status line' do
+  context 'Status Parsing' do
+    context "AD lib/git.rb" do
+      subject { Git::Parser.parse(:status, "AD lib/git.rb") }
+      it{ should be_kind_of(Git::Status) }
+      its(:x){ should == 'A' }
+      its(:y){ should == 'D' }
+      its(:filename){ should == 'lib/git.rb' }
+    end
 
-    line = "AD lib/git.rb"
-    parsed = Git::Parser.new(line).parse
-    parsed.should be_kind_of(Git::ParsedStatus)
+    context " M lib/git.rb" do
+      subject{ Git::Parser.parse(:status, " M lib/git.rb") }
+      its(:x){ should == ' ' }
+      its(:y){ should == 'M' }
+    end
 
-    parsed.x.should == 'A'
-    parsed.y.should == 'D'
-    parsed.filename.should == 'lib/git.rb'
+    context "empty string" do
+      subject{ Git::Parser.parse(:status, '') }
+      its(:x){ should == '' }
+      its(:y){ should == '' }
+    end
 
-    line = " M lib/git.rb"
-    parsed = Git::Parser.new(line).parse
-    parsed.x.should == ' '
-    parsed.y.should == 'M'
+    context "A  lib/git.rb" do
+      subject{ Git::Parser.parse(:status, "A  lib/git.rb") }
+      its(:x){ should == 'A' }
+      its(:y){ should == ' ' }
+    end
+  end
 
-    line = '' # when no file
-    parsed = Git::Parser.new(line).parse
-    parsed.x.should == ''
-    parsed.y.should == ''
+  context 'Commits Parsing' do
+    let(:line){ ["e2dc690 improvements to API design",
+                  "06b8345 Fake repo, tests improvements"] }
 
-    line = "A  lib/git.rb"
-    parsed = Git::Parser.new(line).parse
-    parsed.x.should == 'A'
-    parsed.y.should == ' '
+    subject{ Git::Parser.parse(:commits, line) }
+
+    it{ should be_a(Array) }
+    its(:first){ should be_a Git::Commit }
+
   end
 
 end

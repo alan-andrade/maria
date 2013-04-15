@@ -1,28 +1,39 @@
 module Git
 
-  class ParsedStatus
-    attr_reader :x, :y, :filename
+  module StatusParser
+    extend self
 
-    def initialize(match_data)
-      if match_data.nil?
-        @x , @y, @filename = '', '', ''
+    REGEX = /^(?<x>[\w| ]{1})(?<y>[\w| ]{1})\s(?<filename>(.*))/
+
+    def parse(line)
+      if line.match(REGEX){|match| return Status.new  match[:x],
+                                                      match[:y],
+                                                      match[:filename]
+                          }
       else
-        letters = match_data[:status].split(//) # separate each letter
-        @x, @y = letters.first, letters.last
-        @filename = match_data[:filename]
+        Status.new '', '', ''
       end
     end
   end
 
-  class Parser
-    STATUS_EXP = /^(?<status>[\w| ]{2})\s(?<filename>.*)/
+  module CommitsParser
+    extend self
+    REGEX = /^(?<sha>[0-9a-f]{7})\s(?<message>.*)/
 
-    def initialize(status_line)
-      @status_line = status_line
+    def parse(commits)
+      commits.map do|l|
+        l.match(REGEX){|m| Commit.new m[:sha], m[:message] }
+      end
     end
+  end
 
-    def parse
-      ParsedStatus.new(@status_line.match(STATUS_EXP))
+
+  module Parser
+    extend self
+
+    def parse(type, line)
+      parser = "Git::" + type.to_s.capitalize + "Parser"
+      parser.constantize.parse(line)
     end
 
   end

@@ -11,5 +11,22 @@ module Git
       `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
     end
 
+    def log(n=10)
+      exec(:log, "-#{n}", '--oneline')
+    end
+
+    def status(file_path)
+      result = nil
+      if File.exists?(file_path)
+        result = Git::Run.exec(:status, '--porcelain', file_path)
+        result = result.first
+      end
+      result or ''
+    end
+
+    def diff_tree(sha)
+      exec('diff-tree', '--no-commit-id --name-only -r', sha)
+    end
+
   end
 end

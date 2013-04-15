@@ -40,7 +40,7 @@ module Git
   #
   # Returns the status object for the file
   def status
-    Git::Status.new(file_path)
+    Git::Status.get(self)
   end
 
   # stage
@@ -56,7 +56,7 @@ module Git
   # Seeks under file status and verify is staged using the git
   # index and working tree notation.
   def staged?
-    Git::Status.get(file_path).staged?
+    Git::Status.get(file_path).in_index?
   end
 
   # commit
@@ -84,22 +84,7 @@ module Git
       found :
       found and !status.updated?
   end
-
-  #
-  # Will redirect every call to submodules if any.
-  #
-  # Git.commit.list => Calls Git::Commit.list
-  # Git.status.staged? => Calls Git::Status.staged?
-  def self.method_missing(name, *args, &block)
-    namespace = 'git/'
-    module_string = namespace + name.to_s
-    module_string.camelize.constantize
-  rescue
-    super(name, *args, &block)
-  end
 end
 
-require 'git/run'
-require 'git/branch'
-require 'git/commit'
-require 'git/status'
+require File.dirname(__FILE__) + '/git/run.rb'
+Dir[File.dirname(__FILE__) + '/git/*.rb'].each{|f| require f }

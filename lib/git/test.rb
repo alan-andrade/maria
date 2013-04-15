@@ -3,14 +3,14 @@ require 'git'
 module Git
   module Test
 
-    @original_branch = Git.branch.current
+    @original_branch = Git::Branch.current
     @testing_branch = 'test'
 
     @original_branch != @testing_branch or throw 'Move out from test branch to continue'
 
     def self.before
-      Git.branch.force_switch_to @testing_branch
-      Git.repo.set_fake_remote
+      Git::Branch.force_switch_to @testing_branch
+      Git::Repo.set_fake_remote
     end
 
     def self.after
@@ -18,9 +18,9 @@ module Git
         Git::Run.run(:rm, '-rf', FileControl::Test.root_path) if has_testing_files?
       rescue
       ensure
-        Git.repo.tear_fake_remote
-        Git.branch.switch_to @original_branch
-        Git.branch.delete @testing_branch
+        Git::Repo.tear_fake_remote
+        Git::Branch.switch_to @original_branch
+        Git::Branch.delete @testing_branch
       end
     end
 
