@@ -4,8 +4,16 @@ module Git
     extend self
 
     def current
-      branch = exec(:branch).find{|b| b.match /\*/ }
+      branch = list.find{|b| b.match /\*/ }
       branch.gsub(/\* /, '')
+    end
+
+    def exists?(name)
+      list.include?(name)
+    end
+
+    def list
+      exec(:branch)
     end
 
     def delete(branch)

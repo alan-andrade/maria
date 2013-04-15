@@ -6,7 +6,7 @@ module Maria
     end
 
     def create
-      @page = Maria::Page.new(params[:page])
+      @page = Page.new(params[:page])
       @page.save ?
         redirect_to(pages_path) :
         render(:new)

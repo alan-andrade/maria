@@ -106,11 +106,14 @@ module FileControl
   #
   # Appends and extension to the name if any available
   def complete_name
-    name.nil? ?
-      '' :
-      name + '.' +extension
+    if name.nil?
+      ''
+    else
+      has_extension? ?
+        name :
+        name + '.' + extension
+    end
   end
-
 
   # extension
   #
@@ -118,6 +121,10 @@ module FileControl
   # extension.
   def extension
     ''
+  end
+
+  def has_extension?
+    name.match(/\..*$/)
   end
 
   # relative_path

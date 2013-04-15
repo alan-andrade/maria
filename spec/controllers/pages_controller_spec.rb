@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Maria::PagesController do
+describe Maria::PagesController, git: true do
 
   it 'should render a form' do
     get :new
@@ -13,7 +13,7 @@ describe Maria::PagesController do
   end
 
   it 'should redirect to index when has all attributes' do
-    post :create, page: { name: 'cool beans',
+    post :create, page: { name: 'jamba_beans',
                           content: 'meh.',
                           committer: 'name' }
     response.should redirect_to pages_path

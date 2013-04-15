@@ -91,8 +91,8 @@ module Git
     Git::Run.diff_tree(Git.remote_url).
       map{|f| File.expand_path f }.include? file_path
   end
-
 end
 
-require File.dirname(__FILE__) + '/git/run.rb'
-Dir[File.dirname(__FILE__) + '/git/*.rb'].each{|f| require f }
+%w(run branch commit commits parser repo status).each do |f|
+  require 'git/' + f + '.rb'
+end

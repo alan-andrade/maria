@@ -15,10 +15,20 @@ module Assetable
   module Finders
 
     def all
-      puts "Base path: #{base_path}"
-      files = `ls #{base_path}`
-      puts "Files: #{files}"
-      files.split
+      list.split(/\n/).map{|f| self.new name: f }
+    end
+
+    # this methods feels too weak and wrong.
+    def find(name)
+      list.include?(name) ?
+        self.new(name: name) :
+        nil
+    end
+
+    private
+
+    def list
+      `ls #{base_path}`
     end
 
   end

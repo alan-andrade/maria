@@ -23,7 +23,10 @@ module Assetable
 
     def save
       if valid?
-        write && stage && commit && push || false
+        write
+        stage
+        commit
+        push
       else
         false
       end
