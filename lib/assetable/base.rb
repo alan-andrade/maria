@@ -13,6 +13,8 @@ module Assetable
     validates_presence_of :name, :content, :committer
     validate :content_length # just to avoid the name override
 
+    validates :name, format: { without: /[\s\W]/, message: 'Plase use letters and underscores or hypens'}
+
     def initialize(attributes={})
       attributes ||= {} # avoid nil, ugly though :'(
       throw 'Provide and asset type' unless respond_to? :asset_type
@@ -20,7 +22,11 @@ module Assetable
     end
 
     def save
-      valid? and write
+      if valid?
+        write && stage && commit && push || false
+      else
+        false
+      end
     end
 
     def to_param

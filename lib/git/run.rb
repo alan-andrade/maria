@@ -24,12 +24,26 @@ module Git
       result or ''
     end
 
-    def diff_tree(branch='', sha)
+    def diff_tree(branch='', sha='')
       exec('diff-tree', '--no-commit-id --name-only -r', branch, sha)
     end
 
+    def commit(*args)
+      safety_nets
+      run :commit, args
+    end
+
     def push(remote)
+      safety_nets
       run(:push, remote)
+    end
+
+    private
+
+    def safety_nets
+      if Rails.env.test? and Git::Branch.current != 'test'
+        throw "Not so fast! Youre using git in your tests but git was not specified in the test context.  Just add to the very top:  git: true"
+      end
     end
 
   end

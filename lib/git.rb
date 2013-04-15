@@ -62,8 +62,8 @@ module Git
   # commit
   #
   # 'Persist' or commit the file.
-  def commit(author_name)
-    Git::Commit.apply author_name
+  def commit(author_name=nil)
+    Git::Commit.apply(author_name || committer)
   end
 
   # commited?
@@ -79,7 +79,7 @@ module Git
   def committed?
     return false if status.in_wt? or status.in_index?
     files = Git::Commits.last.files
-    files.include?(self.file_path)
+    files.include?(file_path)
   end
 
   def push
@@ -88,8 +88,8 @@ module Git
   end
 
   def pushed?
-    Git::Run.diff_tree(Git.remote_url, Git::Commits.last.sha).
-      map{|f| File.expand_path f }.include? self.file_path
+    Git::Run.diff_tree(Git.remote_url).
+      map{|f| File.expand_path f }.include? file_path
   end
 
 end
