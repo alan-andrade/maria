@@ -34,7 +34,7 @@ require 'active_support/core_ext/module'
 #
 # Library still with a lot work to do. Don't expect more than this.
 module Git
-  mattr_accessor :remote, :remote_url
+  mattr_accessor :remote, :remote_url, :root
 
   # status
   #

@@ -1,10 +1,16 @@
+require 'active_support/core_ext/kernel/reporting'
+
 module Git
   module Run
     extend self
 
     def run(action, *args)
       command =  "git #{action} #{args.join(' ')}"
-      system(command+' 1>/dev/null') or throw "Github error when called: #{command}"
+      success = nil
+      result = capture(:stderr){
+        success = system(command + ' 1>/dev/null')
+      }
+      success or throw "Github error when called: #{command}. #{result}"
     end
 
     def exec(action, *args)

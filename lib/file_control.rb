@@ -59,6 +59,17 @@ module FileControl
     end
   end
 
+  module ClassMethods
+
+    # wow, this method is embarrasing.
+    def read_from_disk(name)
+      file = new(name: name)
+      file.content = file.read
+      file
+    end
+
+  end
+
   class << self
 
     # root_path=

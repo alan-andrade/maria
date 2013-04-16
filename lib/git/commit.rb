@@ -9,7 +9,8 @@ module Git
     end
 
     def files
-      Git::Run.diff_tree(self.sha).map{|f| File.expand_path f }
+      files = Git::Run.diff_tree(self.sha)
+      files.map{|f| File.expand_path f, Git.root }
     end
 
     # Apply a commit to the working directory.

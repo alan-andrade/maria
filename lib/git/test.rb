@@ -8,11 +8,15 @@ module Git
 
     @original_branch != @testing_branch or throw 'Move out from test branch to continue'
 
+    def self.set_fake_remote_branches
+      Git.remote = 'test'
+      Git.remote_url = "remotes/test/#{Git::Branch.current}"
+    end
+
     def self.before
       Git::Branch.force_switch_to @testing_branch
       Git::Repo.set_fake_remote
-      Git.remote = 'test'
-      Git.remote_url = 'remotes/test/test'
+      self.set_fake_remote_branches
     end
 
     def self.after

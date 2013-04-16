@@ -21,6 +21,10 @@ module Assetable
       attributes.each{ |k,v| send "#{k}=", v }
     end
 
+    def id
+      name
+    end
+
     def save
       if valid?
         write
@@ -32,8 +36,15 @@ module Assetable
       end
     end
 
+    def update_attributes(attributes={})
+      attributes.each do |key, value|
+        send("#{key}=", value)
+      end
+      save
+    end
+
     def to_param
-      name
+      name.gsub(/\..*$/, '')
     end
 
     alias_method :persisted?, :committed?

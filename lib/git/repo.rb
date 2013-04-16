@@ -12,6 +12,8 @@ module Git
     def tear_fake_remote
       `git remote remove test`
       FileUtils.rm_rf test_repo_url
+    rescue
+      puts 'Meh, no fake remote was set. Keep going...'
     end
 
     private

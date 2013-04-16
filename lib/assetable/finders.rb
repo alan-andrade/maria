@@ -15,20 +15,20 @@ module Assetable
   module Finders
 
     def all
-      list.split(/\n/).map{|f| self.new name: f }
+      list.map{|f| self.new name: f }
     end
 
     # this methods feels too weak and wrong.
     def find(name)
       list.include?(name) ?
-        self.new(name: name) :
-        nil
+        self.read_from_disk(name) :
+        throw('Not Found')
     end
 
     private
 
     def list
-      `ls #{base_path}`
+      `ls #{base_path}`.split(/\n/).map{|f| f.gsub(/\..*$/, '') }
     end
 
   end

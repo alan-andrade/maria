@@ -17,7 +17,20 @@ module Maria
     end
 
     def show
-      @page = Page.find(params[:name])
+      @page = Page.find(params[:id])
+    end
+
+    def edit
+      @page = Page.find(params[:id])
+    end
+
+    def update
+      @page = Page.find(params[:id])
+      if @page.update_attributes(params[:page])
+        redirect_to page_path(@page)
+      else
+        render(:edit)
+      end
     end
 
   end

@@ -1,4 +1,5 @@
-%p
-  = @pages
+%ul
+  - @pages.each do |page|
+    %li= link_to page.complete_name, page_path(page)
 
 = link_to 'New Page', new_page_path
