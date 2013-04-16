@@ -1,6 +1,12 @@
 require 'git'
 
 module Git
+  # Test
+  #
+  # Fundametal piece to test the Git workflow.
+  #
+  # This gives methods that will set up fake repos, fake branches and
+  # automated process to work with no hassle doing commits and pushes.
   module Test
 
     @original_branch = Git::Branch.current

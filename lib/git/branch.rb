@@ -2,6 +2,9 @@ module Git
   module Branch
     extend Git::Run
     extend self
+    # Branch
+    #
+    # Tools for branch creation and traversing.
 
     def current
       branch = list.find{|b| b.match /\*/ }

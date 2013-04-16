@@ -1,7 +1,11 @@
 module Git
-
   module Repo
     extend self
+    # Repo
+    #
+    # Tools for creating fake repos.
+    #
+    # Helpful when we want to run things in different environments.
 
     def set_fake_remote
       Dir.mkdir test_repo_url unless Dir.exists? test_repo_url
