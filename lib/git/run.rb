@@ -17,11 +17,14 @@ module Git
     # :action -> what git action you want to run?
     # :args -> any arguments that action could receive
     def run(action, *args)
-      command =  "cd #{Git.root} && git #{action} #{args.join(' ')}"
+      current_dir = Dir.pwd
+      Dir.chdir(Git.root)
+      command =  "git #{action} #{args.join(' ')}"
       success = nil
       result = capture(:stderr){
         success = system(command + ' 1>/dev/null')
       }
+      Dir.chdir(current_dir)
       success or throw "Github error when called: #{command}. #{result}"
     end
 
@@ -30,7 +33,11 @@ module Git
     # Similar to run but will return the stdout result
     # as an array.
     def exec(action, *args)
-      `cd #{Git.root} && git #{action.to_s} #{args.join(' ')}`.split(/\n/)
+      current_dir = Dir.pwd
+      Dir.chdir(Git.root)
+      output = `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
+      Dir.chdir(current_dir)
+      output
     end
 
     # log
