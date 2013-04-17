@@ -17,15 +17,11 @@ module Git
     # :action -> what git action you want to run?
     # :args -> any arguments that action could receive
     def run(action, *args)
-      command =  "git #{action} #{args.join(' ')}"
+      command =  "cd #{Git.root} && git #{action} #{args.join(' ')}"
       success = nil
-      puts command
       result = capture(:stderr){
-        under_root_dir do
-          success = system(command + ' 1>/dev/null')
-        end
+        success = system(command + ' 1>/dev/null')
       }
-      puts success
       success or throw "Github error when called: #{command}. #{result}"
     end
 
@@ -34,9 +30,7 @@ module Git
     # Similar to run but will return the stdout result
     # as an array.
     def exec(action, *args)
-      under_root_dir do
-        `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
-      end
+      `cd #{Git.root} && git #{action.to_s} #{args.join(' ')}`.split(/\n/)
     end
 
     # log
@@ -89,14 +83,6 @@ module Git
       if Rails.env.test? and Git::Branch.current != 'test'
         throw "Not so fast! Youre using git in your tests but git was not specified in the test context.  Just add to the very top:  git: true"
       end
-    end
-
-    def under_root_dir
-      pwd = `pwd`
-      system("cd #{Git.root}")
-      r = yield
-      system("cd #{pwd}")
-      r
     end
 
   end
