@@ -51,7 +51,7 @@ describe Assetable, fc: true, git: true do
   end
 
   context 'Asset persistence' do
-    it 'should push to repo when saving' do
+    it 'should push to repo when saved' do
       asset = StableAsset.new(content: 'meh', name: 'cool_name', committer: 'me')
       asset.save
       asset.should be_pushed

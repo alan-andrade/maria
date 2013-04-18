@@ -1,4 +1,4 @@
-require 'active_support/core_ext/kernel/reporting'
+require 'open3'
 
 module Git
   module Run
@@ -17,15 +17,13 @@ module Git
     # :action -> what git action you want to run?
     # :args -> any arguments that action could receive
     def run(action, *args)
-      current_dir = Dir.pwd
-      Dir.chdir(Git.root)
-      command =  "git #{action} #{args.join(' ')}"
-      success = nil
-      result = capture(:stderr){
-        success = system(command + ' 1>/dev/null')
-      }
-      Dir.chdir(current_dir)
-      success or throw "Github error when called: #{command}. #{result}"
+      # XXX: HELP with catching stderr and report accordingly.
+
+      under_root_dir do
+        command = "git #{action} #{args.join(' ')}"
+        success = system(command)
+        success or throw "Github error when called: #{command}"
+      end
     end
 
     # exec
@@ -33,11 +31,9 @@ module Git
     # Similar to run but will return the stdout result
     # as an array.
     def exec(action, *args)
-      current_dir = Dir.pwd
-      Dir.chdir(Git.root)
-      output = `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
-      Dir.chdir(current_dir)
-      output
+      under_root_dir do
+        `git #{action.to_s} #{args.join(' ')}`.split(/\n/)
+      end
     end
 
     # log
@@ -82,6 +78,14 @@ module Git
     def push(remote)
       safety_nets
       run(:push, remote)
+    end
+
+    def under_root_dir
+      current_dir = Dir.pwd
+      Dir.chdir(Git.root)
+      result = yield
+      Dir.chdir(current_dir)
+      result
     end
 
     private

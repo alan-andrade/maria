@@ -8,13 +8,17 @@ module Git
     # Helpful when we want to run things in different environments.
 
     def set_fake_remote
-      Dir.mkdir test_repo_url unless Dir.exists? test_repo_url
-      `git init --bare #{test_repo_url}`
-      `git remote add test #{test_repo_url}`
+      Git::Run.under_root_dir do
+        Dir.mkdir test_repo_url unless Dir.exists? test_repo_url
+        `git init --bare #{test_repo_url}`
+        `git remote add test #{test_repo_url}`
+      end
     end
 
     def tear_fake_remote
-      `git remote remove test`
+      Git::Run.under_root_dir do
+        `git remote remove test`
+      end
       FileUtils.rm_rf test_repo_url
     rescue
       puts 'Meh, no fake remote was set. Keep going...'
@@ -23,7 +27,7 @@ module Git
     private
 
     def test_repo_url
-     @test_repo_path ||= File.join Maria::Engine.root, '/spec/support/repo'
+      @test_repo_path ||= File.join Maria::Engine.root, '/spec/support/repo'
     end
   end
 

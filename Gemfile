@@ -15,4 +15,5 @@ group :development, :test do
   gem 'rb-fsevent', '~> 0.9'
   gem 'spork'
   gem 'pry'
+  gem 'pry-nav'
 end

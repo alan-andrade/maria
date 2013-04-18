@@ -107,7 +107,7 @@ module Git
   # with the remote branch as target.
   def pushed?
     Git::Run.diff_tree(Git.remote_url).
-      map{|f| File.expand_path f }.include? file_path
+      map{|f| File.expand_path f, Git.root }.include? file_path
   end
 end
 

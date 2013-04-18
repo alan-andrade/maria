@@ -9,10 +9,12 @@ module Git
   # automated process to work with no hassle doing commits and pushes.
   module Test
 
-    @original_branch = Git::Branch.current
-    @testing_branch = 'test'
+    Git::Run.under_root_dir do
+      @original_branch = Git::Branch.current
+      @testing_branch = 'test'
 
-    @original_branch != @testing_branch or throw 'Move out from test branch to continue'
+      @original_branch != @testing_branch or throw 'Move out from test branch to continue'
+    end
 
     def self.set_fake_remote_branches
       Git.remote = 'test'

@@ -105,7 +105,7 @@ module Assetable
     # it.
     #
     # our persistence mark is the committed state our file has.
-    alias_method :persisted?, :committed?
+    alias_method :persisted?, :written?
 
 
     # asset_type
