@@ -3,5 +3,8 @@ module Assetable
   require 'active_model'
   require 'assetable/finders'
   require 'assetable/base'
-  require 'assetable/template'
+
+  %w(basic dummy html).each do |f|
+    require "assetable/asset_types/#{f}.rb"
+  end
 end

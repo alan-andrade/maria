@@ -51,7 +51,7 @@ module Assetable
     # You must pass an attributes hash.
     def initialize(attributes={})
       attributes ||= {}
-      throw 'Provide and asset type' unless respond_to? :asset_type
+      throw 'Provide and asset type' unless defined? @asset
       attributes.each{ |k,v| send "#{k}=", v }
     end
 
