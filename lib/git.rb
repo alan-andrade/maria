@@ -85,7 +85,7 @@ module Git
   # A bit weak, but enough for now.
   def committed?
     return false if status.in_wt? or status.in_index?
-    files = Git::Commits.last.files
+    files = Git::Commits.list(30).files
     files.include?(file_path)
   end
 

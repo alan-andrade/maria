@@ -1,8 +1,10 @@
+%h1 Editing: #{@page.complete_name}
 = form_for @page do |f|
-  = @page.complete_name
-  %br
   = f.text_area :content
   %br
+  = f.label :committer, "Who made this change?"
   = f.text_field :committer
   %br
   = f.submit 'update'
+
+= link_to 'Back', pages_path

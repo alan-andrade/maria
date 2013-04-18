@@ -39,7 +39,7 @@ module Git
     # log
     #
     # Returns the git log of the current branch with the oneline formatting.
-    def log(n=10)
+    def log(n)
       exec(:log, "-#{n}", '--oneline')
     end
 

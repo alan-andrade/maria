@@ -15,6 +15,12 @@ module Git
       end
     end
 
+    def set_real_remote
+      Git::Run.under_root_dir do
+        `git remote set-url origin git@github.com:marqeta/maria.git`
+      end
+    end
+
     def tear_fake_remote
       Git::Run.under_root_dir do
         `git remote remove test`

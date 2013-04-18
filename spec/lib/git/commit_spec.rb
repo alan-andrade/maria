@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe Git::Commit, git: true do
 
-  before do
-    #fake_commits
-    Git::Run.stub(log: ["e2dc690 improvements to API design"])
-    #fake_files_in_commits
-    Git::Run.stub("diff_tree" => ['spec/.tmp/testfiles/test_dummy.', 'dummy.txt'])
-  end
-
   it 'contains the files under the commit' do
     Git::Commits.last.files.should be_a(Array)
   end

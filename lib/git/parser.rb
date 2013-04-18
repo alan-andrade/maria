@@ -39,9 +39,10 @@ module Git
     REGEX = /^(?<sha>[0-9a-f]{7})\s(?<message>.*)/
 
     def parse(commits)
-      commits.map do|l|
+      commits.map! do |l|
         l.match(REGEX){|m| Commit.new m[:sha], m[:message] }
       end
+      CommitsArray.new(commits)
     end
   end
 end

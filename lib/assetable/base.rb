@@ -96,7 +96,11 @@ module Assetable
     #
     # Whe want the name with no extension.
     def to_param
-      name.gsub(/\..*$/, '')
+      if name
+        name.gsub(/\..*$/, '')
+      else
+        ''
+      end
     end
 
     # persisted?
@@ -105,7 +109,7 @@ module Assetable
     # it.
     #
     # our persistence mark is the committed state our file has.
-    alias_method :persisted?, :written?
+    alias_method :persisted?, :committed?
 
 
     # asset_type

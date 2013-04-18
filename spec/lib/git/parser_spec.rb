@@ -36,7 +36,7 @@ describe Git::Parser do
 
     subject{ Git::Parser.parse(:commits, line) }
 
-    it{ should be_a(Array) }
+    it{ should be_a(Git::CommitsArray) }
     its(:first){ should be_a Git::Commit }
 
   end

@@ -9,7 +9,7 @@ describe Git::Commits do
     its(:size){ should == 1 }
     its(:last){ be_kind_of(Git::Commit) }
 
-    it{ should be_kind_of(Array) }
+    it{ should be_kind_of(Git::CommitsArray) }
   end
 
   context 'with 2 or more commits' do
@@ -18,7 +18,7 @@ describe Git::Commits do
 
     subject{ Git::Commits.list }
 
-    it{ should be_kind_of(Array) }
+    it{ should be_kind_of(Git::CommitsArray) }
     its(:size){ should == 2 }
     its(:last){ be_kind_of(Git::Commit) }
   end
