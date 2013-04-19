@@ -159,6 +159,10 @@ module FileControl
     end
   end
 
+  def save
+    write
+  end
+
   # read
   #
   # Reads the content of the file if it has been written down previously.

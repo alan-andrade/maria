@@ -109,6 +109,20 @@ module Git
     Git::Run.diff_tree(Git.remote_url).
       map{|f| File.expand_path f, Git.root }.include? file_path
   end
+
+  # save
+  #
+  # Will stage, commit and push the file to git repo.
+  def save
+    super() # Goes to #FileControl.save()
+  rescue NoMethodError => e
+    puts "Git expects a layer that persists to disk with #save. None was found."
+  ensure
+    stage
+    commit
+    push
+  end
+
 end
 
 %w(run branch commit commits parser repo status).each do |f|

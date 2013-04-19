@@ -58,8 +58,8 @@ module Assetable
     # The asset id will be the name (not the complete name, which includes
     # the file extension)
     #
-    # Beware that once the asset has a name, we don't want to change it, unless
-    # we really need to.
+    # Beware that once the asset has a name, it wont' change. We don't the code
+    # to do that.
     def id
       name
     end
@@ -70,10 +70,11 @@ module Assetable
     # FileControl, then Git, and then push to remote repo.
     def save
       if valid?
-        write
-        stage
-        commit
-        push
+        begin
+          super() # Goes through Git#save() and FileControl#save()
+        rescue NoMethodError => e
+          throw "Assetable::Base doesnt know how to save data. Please provide and interface that does. Like FileControl or Git"
+        end
       else
         false
       end
