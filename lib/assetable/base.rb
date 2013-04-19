@@ -51,7 +51,7 @@ module Assetable
     # You must pass an attributes hash.
     def initialize(attributes={})
       attributes ||= {}
-      throw 'Provide and asset type' unless defined? @asset
+      throw 'Provide and asset type' unless respond_to? :asset_type
       attributes.each{ |k,v| send "#{k}=", v }
     end
 
@@ -111,13 +111,13 @@ module Assetable
     # our persistence mark is the committed state our file has.
     alias_method :persisted?, :committed?
 
-
     # asset_type
     #
     # Necessary method to load asset behaviour.
-    def self.asset_type(type=:html)
+    def self.asset_type(type)
       base = 'assetable/'
-      include (base+type.to_s).camelize.constantize
+      type = type.to_s + '_asset'
+      include (base + type).camelize.constantize
     end
 
     def self.base_path
@@ -128,7 +128,6 @@ module Assetable
 
     # Validating this way feels funky... meh
     def content_length
-      ### ___________ -> giak, a bunch of logic here.
       if !content.nil? and content.length > max_size
         errors.add :base, 'Content is too big.'
       end

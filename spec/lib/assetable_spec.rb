@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'assetable/dummy'
 
 describe Assetable, fc: true, git: true do
 

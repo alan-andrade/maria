@@ -1,6 +1,7 @@
 module Assetable
 
-  class HtmlAsset < BasicAsset
+  module HtmlAsset
+    include BasicAsset
 
     def asset_type
       :html

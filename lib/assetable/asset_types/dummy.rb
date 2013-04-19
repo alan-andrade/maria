@@ -1,6 +1,7 @@
 module Assetable
 
-  class DummyAsset < BasicAsset
+  module DummyAsset
+    include BasicAsset
 
     def asset_type
       :dummy
