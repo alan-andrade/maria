@@ -29,7 +29,7 @@ describe Assetable, fc: true, git: true do
       asset = StableAsset.new
       asset.content = '.'
       asset.committer = 'me'
-      asset.name = 'spaces not good'
+      asset.basename = 'spaces not good'
       asset.should_not be_valid
     end
 
@@ -42,7 +42,7 @@ describe Assetable, fc: true, git: true do
 
   context 'how files should look like' do
     it 'should have the correct extension' do
-      asset = StableAsset.new(content: 'meh', name: 'woot')
+      asset = StableAsset.new(content: 'meh', basename: 'woot')
       asset.write
       path = asset.file_path
       File.extname(path).should == '.dummyext'
@@ -51,7 +51,7 @@ describe Assetable, fc: true, git: true do
 
   context 'Asset persistence' do
     it 'should push to repo when saved' do
-      asset = StableAsset.new(content: 'meh', name: 'cool_name', committer: 'me')
+      asset = StableAsset.new(content: 'meh', basename: 'cool_name', committer: 'me')
       asset.save
       asset.should be_pushed
     end

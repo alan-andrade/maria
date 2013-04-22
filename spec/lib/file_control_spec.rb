@@ -28,6 +28,24 @@ describe FileControl, fc: true do
 
   end
 
+  describe 'Nice attributes' do
+    class TestableAsset
+      attr_accessor :name, :content
+      include FileControl
+    end
+
+    it 'has understandable attributes' do
+      file = TestableAsset.new
+      file.name = 'test.txt'
+      file.content = 'I just came here to test stuff.'
+
+      file.basename.should == 'test'
+      file.extension.should == 'txt'
+      file.filename.should == 'test.txt'
+    end
+
+  end
+
   describe 'Disk Writting' do
     let( :test_dir ){ FileControl::Test.root_path }
     let( :name )    { 'test.txt' }
@@ -52,7 +70,7 @@ describe FileControl, fc: true do
       page.should be_written
 
       page.read.should == content
-      # It demodulalizes the file_path where its saved
+      # It demodulizes the file_path where its saved
       page.file_path.should_not match(/::/)
     end
 

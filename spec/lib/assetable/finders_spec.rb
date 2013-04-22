@@ -7,7 +7,7 @@ describe Assetable::Finders, fs: true do
 
     it 'accepts file names with extension' do
       page = Html.new
-      page.name = 'test'
+      page.basename = 'test'
       page.content = '<h1>Wow</h1>'
       page.committer = 'alan'
       page.write
@@ -22,7 +22,7 @@ describe Assetable::Finders, fs: true do
   context '.all' do
     it 'returns array of object of same type the class that called it' do
       page = Html.new
-      page.name = 'test'
+      page.basename = 'test'
       page.content = '<h1>Wow</h1>'
       page.committer = 'alan'
       page.write

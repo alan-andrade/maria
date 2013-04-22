@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'active_support/core_ext/string'
 
 #
 # FileControl Module
@@ -62,8 +63,8 @@ module FileControl
   module ClassMethods
 
     # wow, this method is embarrasing.
-    def read_from_disk(name)
-      file = new(name: name)
+    def read_from_disk(basename)
+      file = new(basename: basename)
       file.content = file.read
       file
     end
@@ -110,20 +111,11 @@ module FileControl
   #
   # Return the complete path including the name of the file.
   def file_path
-    File.join base_path , complete_name
+    File.join base_path , name
   end
 
-  # complete_name
-  #
-  # Appends and extension to the name if any available
-  def complete_name
-    if name.nil?
-      ''
-    else
-      has_extension? ?
-        name :
-        name + '.' + extension
-    end
+  def basename
+    name.gsub(/\..*$/, '')
   end
 
   # extension
@@ -131,11 +123,11 @@ module FileControl
   # Method meant to be overriden with a function that returns a descent
   # extension.
   def extension
-    ''
+    name[/\w*$/]
   end
 
-  def has_extension?
-    name.match(/\..*$/)
+  def filename
+    name
   end
 
   # relative_path

@@ -13,20 +13,20 @@ describe Maria::PagesController, git: true do
   end
 
   it 'should redirect to index when has all attributes' do
-    post :create, page: { name: 'jamba_beans',
+    post :create, page: { basename: 'jamba_beans',
                           content: 'meh.',
                           committer: 'name' }
     response.should redirect_to pages_path
   end
 
   it 'should render a form when editing' do
-    Maria::Page.stub find: Maria::Page.new(name: 'test', content: 'html stuff')
+    Maria::Page.stub find: Maria::Page.new(basename: 'test', content: 'html stuff')
     get :edit, id: 'test'
     response.should render_template 'maria/pages/edit'
   end
 
   it 'should update the page' do
-    page = Maria::Page.new(name: 'test', content: 'foo')
+    page = Maria::Page.new(basename: 'test', content: 'foo')
     page.save
     Maria::Page.stub find: page
 

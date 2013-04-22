@@ -32,7 +32,17 @@ module Assetable
     #
     # Its important you load the Assetable::Template so that your module
     # inherits all default behaviour.
-    attr_accessor :name, :content, :committer
+    attr_accessor :basename, :content, :committer
+
+    # Overrides normal FileControl method so that we always set the
+    # file basename, not the name (which includes the extension)
+    def name
+      if basename
+        basename + '.' + extension
+      else
+        nil
+      end
+    end
 
     include ActiveModel::Conversion
     include ActiveModel::Validations
@@ -45,14 +55,15 @@ module Assetable
     validates_presence_of :name, :content, :committer
     validate :content_length # just to avoid the name override
 
-    validates :name, format: { without: /[\s\W]/, message: 'Plase use letters and underscores or hypens'}
+    validates :basename, format: { without: /[\s\W]/, message: 'Plase use letters and underscores or hypens'}
 
     # Creates a new asset object that could be persisted later.
     # You must pass an attributes hash.
     def initialize(attributes={})
-      attributes ||= {}
       throw 'Provide and asset type' unless respond_to? :asset_type
-      attributes.each{ |k,v| send "#{k}=", v }
+      unless attributes.nil?
+        attributes.each{ |k,v| send "#{k}=", v }
+      end
     end
 
     # The asset id will be the name (not the complete name, which includes
@@ -61,7 +72,7 @@ module Assetable
     # Beware that once the asset has a name, it wont' change. We don't the code
     # to do that.
     def id
-      name
+      basename
     end
 
     # save
@@ -97,12 +108,9 @@ module Assetable
     #
     # Whe want the name with no extension.
     def to_param
-      if name
-        name.gsub(/\..*$/, '')
-      else
-        ''
-      end
+      basename
     end
+
 
     # persisted?
     #

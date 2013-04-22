@@ -15,13 +15,13 @@ module Assetable
   module Finders
 
     def all
-      list.map{|f| self.new name: f }
+      list.map{|f| self.new basename: f }
     end
 
     # this methods feels too weak and wrong.
-    def find(name)
-      list.include?(name) ?
-        self.read_from_disk(name) :
+    def find(basename)
+      list.include?(basename) ?
+        self.read_from_disk(basename) :
         throw('Not Found')
     end
 

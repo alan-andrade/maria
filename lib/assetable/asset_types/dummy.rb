@@ -1,7 +1,7 @@
 module Assetable
 
   module DummyAsset
-    include BasicAsset
+    extend BasicAsset
 
     def asset_type
       :dummy
