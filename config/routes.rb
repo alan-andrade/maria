@@ -1,3 +1,3 @@
 Maria::Engine.routes.draw do
-  resources :pages
+  resources :pages, :images
 end

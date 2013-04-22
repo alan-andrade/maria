@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Assetable, git: true do
 
-  let(:tempImage){ File.open(File.expand_path '../../../../support/test.png', __FILE__) }
+  let(:tempImage){ File.open(File.expand_path '../../../../fixtures/test.png', __FILE__) }
 
   Png = Class.new(Assetable::Base){ asset_type :dummy_binary }
 

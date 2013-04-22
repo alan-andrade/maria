@@ -25,6 +25,10 @@ module Assetable
         throw('Not Found')
     end
 
+    def count
+      list.size
+    end
+
     private
 
     def list

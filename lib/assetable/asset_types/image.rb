@@ -1,18 +1,20 @@
 module Assetable
-  module DummyBinaryAsset
+
+  module ImageAsset
     include BinaryBase
 
     def asset_type
-      :dummy_binary
-    end
-
-    def extension
-      'png'
+      :image
     end
 
     def max_size
       5.megabytes
     end
 
+    def extension
+      'png'
+    end
+
   end
+
 end
