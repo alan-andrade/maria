@@ -60,7 +60,7 @@ module Git
   # Will write the file and then stage it or move it to the 'index'.
   # All weird git terms...
   def stage
-    write
+    write unless written?
     Git::Run.run :add, '-f', file_path
   end
 
@@ -108,19 +108,6 @@ module Git
   def pushed?
     Git::Run.diff_tree(Git.remote_url).
       map{|f| File.expand_path f, Git.root }.include? file_path
-  end
-
-  # save
-  #
-  # Will stage, commit and push the file to git repo.
-  def save
-    super() # Goes to #FileControl.save()
-  rescue NoMethodError => e
-    puts "Git expects a layer that persists to disk with #save. None was found."
-  ensure
-    stage
-    commit
-    push
   end
 
 end

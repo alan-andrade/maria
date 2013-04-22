@@ -101,6 +101,7 @@ module FileControl
     def reset
       @root_path = nil
     end
+
   end
 
   def base_path
@@ -149,10 +150,6 @@ module FileControl
     File.open file_path, 'w+' do |f|
       f.write content
     end
-  end
-
-  def save
-    write
   end
 
   # read

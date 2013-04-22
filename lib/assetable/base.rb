@@ -81,11 +81,10 @@ module Assetable
     # FileControl, then Git, and then push to remote repo.
     def save
       if valid?
-        begin
-          super() # Goes through Git#save() and FileControl#save()
-        rescue NoMethodError => e
-          throw "Assetable::Base doesnt know how to save data. Please provide and interface that does. Like FileControl or Git"
-        end
+        write
+        stage
+        commit
+        push
       else
         false
       end
@@ -110,7 +109,6 @@ module Assetable
     def to_param
       basename
     end
-
 
     # persisted?
     #

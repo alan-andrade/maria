@@ -4,7 +4,7 @@ module Assetable
   require 'assetable/finders'
   require 'assetable/base'
 
-  %w(basic dummy html).each do |f|
+  %w(basic dummy html dummy_binary).each do |f|
     require "assetable/asset_types/#{f}.rb"
   end
 end
