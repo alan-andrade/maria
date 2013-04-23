@@ -7,7 +7,11 @@ module Assetable
   #%w(basic dummy html dummy_binary image).each do |f|
     #require "assetable/asset_types/#{f}.rb"
   #end
-  Dir.chdir 'lib'
-  Dir["assetable/asset_types/*.rb"].each{|f| require f }
-  Dir.chdir '..'
+  require 'assetable/asset_types/basic'
+  require 'assetable/asset_types/binary_base'
+  require 'assetable/asset_types/dummy'
+  require 'assetable/asset_types/dummy_binary'
+  require 'assetable/asset_types/html'
+  require 'assetable/asset_types/image'
+
 end

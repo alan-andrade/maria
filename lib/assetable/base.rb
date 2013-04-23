@@ -40,7 +40,7 @@ module Assetable
       if basename
         basename + '.' + extension
       else
-        nil
+        ''
       end
     end
 

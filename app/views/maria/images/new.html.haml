@@ -1,0 +1,11 @@
+New Image
+
+= form_for @image, { multipart: true } do |f|
+  %p
+    = f.label :basename, "Name of file"
+    = f.text_field :basename
+  %p
+    = f.label :file, "File:"
+    = f.file_field :file, accept: '.png'
+  %p
+    = f.submit
